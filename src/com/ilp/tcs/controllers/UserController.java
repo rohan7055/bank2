@@ -15,8 +15,9 @@ import com.google.gson.Gson;
 import com.ilp.tcs.bean.Customer;
 import com.ilp.tcs.bean.User;
 import com.ilp.tcs.controllers.Models.Model;
+import com.ilp.tcs.dao.ApplicationDao;
 import com.ilp.tcs.responsemodel.CustomerLoginResponse;
-import com.ilp.tcs.responsemodel.CustomerRegisterResponse;
+import com.ilp.tcs.responsemodel.CustomerResponse;
 import com.ilp.tcs.responsemodel.StatusModel;
 import com.ilp.tcs.service.ApplicationService;
 import com.ilp.tcs.utils.MessageConstants;
@@ -110,6 +111,10 @@ public class UserController extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		ApplicationDao dao = new ApplicationDao();
+		ApplicationService service = new ApplicationService(dao);
+		
 		String pathInfo = req.getPathInfo();
 		System.out.println(pathInfo);
 
@@ -138,6 +143,7 @@ public class UserController extends HttpServlet{
 		}
 		//this should be either /login or /register
 		String urlSelector = splits[1];
+		try {
 		
 		if(urlSelector.equalsIgnoreCase("login")){
 			//login function should be called from the service
@@ -145,23 +151,20 @@ public class UserController extends HttpServlet{
 			System.out.println(payload);
 			Gson _gson = new Gson();
 			User user=_gson.fromJson(payload, User.class);
-			System.out.println("USER "+user.getSsn());
 			Typetester typetester=new Typetester();
-			typetester.printType(user.getSsn());
-            CustomerLoginResponse responseOBJ=ApplicationService.login(user.getSsn(), user.getPassword());
+            CustomerLoginResponse responseOBJ=service.login(user.getSsn(), user.getPassword());
 			System.out.println("RESPONSE "+responseOBJ.getMessage()+":"+responseOBJ.getStatusCode());
-
 	        Utils.sendAsJson(resp, responseOBJ);
 			return;
 		}
 		
 		else if(urlSelector.equalsIgnoreCase("register")){
-		    String payload=Utils.getJSONAngular(req);
+		    String payload=Utils.getJSON(req);
 		     System.out.println(payload);
 
 			Gson _gson = new Gson();
 			Customer customer=_gson.fromJson(payload, Customer.class);
-			CustomerRegisterResponse responseOBJ=ApplicationService.register(customer);
+			CustomerResponse responseOBJ=service.register(customer);
 			Utils.sendAsJson(resp, responseOBJ);
 			return;
 		}
@@ -177,6 +180,15 @@ public class UserController extends HttpServlet{
             statusModel.setMessage(MessageConstants.BAD_REQUEST);
             statusModel.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
 
+            Utils.sendAsJson(resp, statusModel);
+			return;
+		}
+		}catch (Exception e) {
+			e.printStackTrace();
+			StatusModel statusModel=new StatusModel();
+            statusModel.setStatus(false);
+            statusModel.setMessage("Some Error Occured");
+            statusModel.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
             Utils.sendAsJson(resp, statusModel);
 			return;
 		}

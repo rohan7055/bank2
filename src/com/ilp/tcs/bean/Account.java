@@ -6,8 +6,15 @@ public class Account {
 	private double acct_balance;
 	private String acct_created_date;
 	private String acct_status;
+	private long cust_id;
 	
 	
+	public long getCust_id() {
+		return cust_id;
+	}
+	public void setCust_id(long cust_id) {
+		this.cust_id = cust_id;
+	}
 	public Account() {
 		
 	}

@@ -76,6 +76,7 @@ public class Utils {
 			System.out.println(map.size());
 			for(String paramName:map.keySet()) {
 				prettyJson=paramName;
+				System.out.println(paramName);
 			}
 	 
 		    return prettyJson;

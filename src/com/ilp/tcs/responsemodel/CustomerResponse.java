@@ -2,8 +2,8 @@ package com.ilp.tcs.responsemodel;
 
 import com.ilp.tcs.bean.Customer;
 
-public class CustomerUpdateResponse extends StatusModel {
-
+public class CustomerResponse extends StatusModel
+{
 	private Customer data;
 
 	public Customer getData() 
@@ -15,6 +15,4 @@ public class CustomerUpdateResponse extends StatusModel {
 	{
 		this.data = data;
 	}
-	
-
 }

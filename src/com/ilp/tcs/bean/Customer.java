@@ -16,6 +16,22 @@ public class Customer {
 	public Customer() {
 		
 	}
+	
+	public Customer(long ssn, long cust_id, String cust_name, String cust_addr, int cust_age, String cust_city,
+			String cust_state, String cust_status, String cust_create_date, String cust_last_updated) {
+
+		this.ssn = ssn;
+		this.cust_id = cust_id;
+		this.cust_name = cust_name;
+		this.cust_addr = cust_addr;
+		this.cust_age = cust_age;
+		this.cust_city = cust_city;
+		this.cust_state = cust_state;
+		this.cust_status = cust_status;
+		this.cust_create_date = cust_create_date;
+		this.cust_last_updated = cust_last_updated;
+	}
+
 	public long getSsn() {
 		return ssn;
 	}

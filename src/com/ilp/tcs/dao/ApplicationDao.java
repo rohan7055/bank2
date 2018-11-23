@@ -468,6 +468,22 @@ public class ApplicationDao implements DaoInterface{
 		
 		return account;
 	}
+
+
+	@Override
+	public int reActivateCustomer(long ssn) throws SQLException {
+		Customer customer=null;
+		int status=0;
+		Connection conn = DatabaseUtil.getConnection();
+		PreparedStatement ps = conn.prepareStatement(QueryHelper.REACTIVATE_CUSTOMER);
+		ps.setString(1, "active");
+		ps.setLong(2, ssn);
+		status=ps.executeUpdate();
+		DatabaseUtil.closeStatement(ps);
+		DatabaseUtil.closeConnection(conn);
+		return status;
+		
+	}
 	
 	
 	

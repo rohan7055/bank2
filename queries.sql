@@ -16,7 +16,7 @@ create table customer_groupB
 create sequence custId_seq start with 300000001 MAXVALUE 999999999 increment by 1
 
 select * from CUSTOMER_GROUPB;
-update CUSTOMER_GROUPB set cust_status='active';
+update CUSTOMER_GROUPB set cust_status='inactive';
 select * from customer_groupB where cust_id=300000002;
 
 insert into CUSTOMER_GROUPB values (123456789,custId_seq.nextval,'Rishabh','Rajasthan',19,'Deoli','Rajasthan','active',

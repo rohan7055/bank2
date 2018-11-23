@@ -46,6 +46,7 @@ public interface DaoInterface
 	public ArrayList<Account> viewAccountsByCustId(long cust_id) throws SQLException;
 	
 	public Account checkAccount(long ssn) throws SQLException;
+	public int reActivateCustomer(long ssn)throws SQLException;
 	
 	public Account getAccountByType(long cust_id,String acct_type) throws SQLException;
 	public long getAccountId() throws SQLException;

@@ -20,6 +20,7 @@ import com.ilp.tcs.responsemodel.StatusModel;
 import com.ilp.tcs.responsemodel.AccountResponse;
 import com.ilp.tcs.utils.AppConstants;
 import com.ilp.tcs.utils.MessageConstants;
+import com.ilp.tcs.utils.Utils;
 
 public class ApplicationService {
 	
@@ -498,8 +499,8 @@ public class ApplicationService {
 	}
 	
 	
-	public StatusModel checkCustomer(long ssn){
-		StatusModel statusModel=new StatusModel();
+	public CustomerResponse checkCustomer(long ssn){
+		CustomerResponse statusModel=new CustomerResponse();
 		System.out.println(ssn);
 		try {
 			Customer customer=daoInterface.getCustomerBySSN(ssn);
@@ -510,10 +511,13 @@ public class ApplicationService {
 					statusModel.setStatus(Boolean.FALSE);
 					statusModel.setMessage("Customer Already Exist with SSN ID: "+ssn);
 					statusModel.setStatusCode(AppConstants.STATUS_SHOWFORM_ERROR);	
+					statusModel.setData(customer);
 				}else if(customer.getCust_status().equalsIgnoreCase("inactive")){
 					statusModel.setStatus(Boolean.FALSE);
 					statusModel.setMessage("Customer Already Registered with SSN ID: "+ssn+".Do you want to reactivate");
 					statusModel.setStatusCode(AppConstants.STATUS_SHOWPROMPT);	
+					statusModel.setData(customer);
+
 				}
 			}else {
 				statusModel.setStatus(Boolean.TRUE);
@@ -819,6 +823,40 @@ public AccountResponse checkAccountDelete(long acct_id) {
 			return accountResponse;
 		}
 	}
+
+public CustomerResponse reActivateCustomer(long ssn) {
+	CustomerResponse response=checkCustomer(ssn);
+	CustomerResponse responseOBJ=new CustomerResponse();
+	try {
+	if(!response.isStatus()) {
+		if(response.getData().getCust_status().equals("active")) {
+		responseOBJ.setStatus(Boolean.FALSE);
+		responseOBJ.setStatusCode(AppConstants.STATUS_SHOWPROMPT);
+		responseOBJ.setData(response.getData());
+		responseOBJ.setMessage("Cannot Reactivate already active customer");
+		}else if(response.getData().getCust_status().equals("inactive")) {
+			if(daoInterface.reActivateCustomer(ssn)>0) {
+				responseOBJ.setStatus(Boolean.TRUE);
+				responseOBJ.setStatusCode(AppConstants.STATUS_OK);
+				response.setData(daoInterface.getCustomerBySSN(ssn));
+				responseOBJ.setData(response.getData());
+				responseOBJ.setMessage("Successfully Reactivated the Customer");
+			}else {
+				responseOBJ.setStatus(Boolean.FALSE);
+				responseOBJ.setStatusCode(AppConstants.STATUS_SHOWPROMPT);
+				responseOBJ.setData(response.getData());
+				responseOBJ.setMessage("Error Reactivating the Customer,ID :"+response.getData().getCust_id());
+			}
+		}
+	}else {
+		
+	}
+	}catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+	return responseOBJ;
+}
 
 
 }

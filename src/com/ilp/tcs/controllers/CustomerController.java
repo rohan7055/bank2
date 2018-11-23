@@ -205,7 +205,18 @@ String pathInfo = request.getPathInfo();
 		return;
 		}
 		
-		//end of customer search API		
+		//end of customer search API	
+		
+		//reactivate API
+		else if(urlSelector.equalsIgnoreCase("reactivatecustomer")){
+			String payload=Utils.getJSONAngular(request);
+			Gson gson=new Gson();
+			Customer customer=gson.fromJson(payload, Customer.class);
+			CustomerResponse customerResponseOBJ=service.reActivateCustomer(customer.getSsn());
+			Utils.sendAsJson(response, customerResponseOBJ);
+		    return;
+		}
+		
 		
 
 		//This block to handle any invalid  urlSelector

@@ -71,7 +71,7 @@ public class AccountController extends HttpServlet {
 		//2.To check max number of accounts
 		//3.To simply create account
 		if(urlSelector.equalsIgnoreCase("checkaccount")){
-			String payLoad = Utils.getJSON(request);
+			String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Account account = _gson.fromJson(payLoad, Account.class);
@@ -79,7 +79,7 @@ public class AccountController extends HttpServlet {
 			Utils.sendAsJson(response, responseObj);
 			return;
 		}else if(urlSelector.equalsIgnoreCase("checkcustomer")){
-            String payLoad = Utils.getJSON(request);
+            String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Customer customer = _gson.fromJson(payLoad, Customer.class);
@@ -88,7 +88,7 @@ public class AccountController extends HttpServlet {
 			return;			
 		}
 		else if(urlSelector.equalsIgnoreCase("createaccount")){
-            String payLoad = Utils.getJSON(request);
+            String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Account account = _gson.fromJson(payLoad, Account.class);
@@ -103,7 +103,7 @@ public class AccountController extends HttpServlet {
 		//1.Check Account for deletion
 		//2.If exist with given type delete it
 		else if(urlSelector.equalsIgnoreCase("checkdelete")){
-			String payLoad = Utils.getJSON(request);
+			String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Account account = _gson.fromJson(payLoad, Account.class);
@@ -111,7 +111,7 @@ public class AccountController extends HttpServlet {
 			Utils.sendAsJson(response, responseObj);
 			return;
 		}else if(urlSelector.equalsIgnoreCase("deleteaccount")){
-			String payLoad = Utils.getJSON(request);
+			String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Account account = _gson.fromJson(payLoad, Account.class);
@@ -126,7 +126,7 @@ public class AccountController extends HttpServlet {
 		//1.Account By Account ID
 		//2.Account By Customer ID
 		else if(urlSelector.equalsIgnoreCase("viewbyacctid")){
-			String payLoad = Utils.getJSON(request);
+			String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Account account = _gson.fromJson(payLoad, Account.class);
@@ -135,7 +135,7 @@ public class AccountController extends HttpServlet {
 			return;
 		}
 		else if(urlSelector.equalsIgnoreCase("viewbycustid")){
-			String payLoad = Utils.getJSON(request);
+			String payLoad = Utils.getJSONAngular(request);
 			System.out.println(payLoad);
 			Gson _gson = new Gson();
 			Account account = _gson.fromJson(payLoad, Account.class);

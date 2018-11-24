@@ -418,11 +418,13 @@ public class ApplicationService {
 				
 				temp.setAcct_id(account.getAcct_id());
 				temp.setAcct_status(account.getAcct_status());
+		     if(account.getAcct_status().equals("active")) {
 
-				if(temp.getAcct_type().equals(account_type))
-				{
+				  if(account.getAcct_type().equals(account_type))
+				   { 
 					
-					if(daoInterface.deleteCustomer(acct_id) > 0)
+					
+					if(daoInterface.deleteAccount(acct_id) > 0)
 					{
 						response.setStatus(true);
 						response.setStatusCode(200);
@@ -442,7 +444,16 @@ public class ApplicationService {
 					response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
 					response.setMessage("Account Type does not match with the specified Account ID");
 				}
+				
+				
+			}else {
+				response.setStatus(false);
+				response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
+				response.setMessage("Account is already deactivated");
 			}
+				
+				
+		}
 			else
 			{
 				response.setStatus(false);

@@ -280,7 +280,7 @@ public class ApplicationDao implements DaoInterface{
 			account.setCust_id(rs.getLong(2));
 			account.setAcct_type(rs.getString(3));
 			account.setAcct_balance(rs.getDouble(4));
-			//account.setAcct_created_date(rs.getString(5));
+			account.setAcct_created_date(rs.getString(5));
 			account.setAcct_status(rs.getString(6));
 			
 		}
@@ -354,7 +354,7 @@ public class ApplicationDao implements DaoInterface{
 	public int createAccount(Account a) throws SQLException {
 		//String sql1="insert into CUSTOMER_GROUPB values (123456789,custId_seq.nextval,'Rishabh','Rajasthan',19,'Deoli','Rajasthan','active',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)";
         int status=0;
-		String sql="insert into account_groupB values (?,?,?,?,CURRENT_TIMESTAMP,? where cust_id=?)";
+		String sql="insert into account_groupB values (?,?,?,?,CURRENT_TIMESTAMP,?)";
 		Connection conn=DatabaseUtil.getConnection();
 		PreparedStatement ps=conn.prepareStatement(sql);
 		ps.setLong(1, a.getAcct_id());
@@ -362,8 +362,7 @@ public class ApplicationDao implements DaoInterface{
 		ps.setLong(2, a.getCust_id());
 		ps.setString(3,a.getAcct_type());
 		ps.setDouble(4,a.getAcct_balance());
-		ps.setString(5, a.getAcct_status());
-		ps.setLong(6, a.getCust_id());
+		ps.setString(5, "active");
 		
 		status=ps.executeUpdate();
 		DatabaseUtil.closeStatement(ps);
@@ -380,8 +379,8 @@ public class ApplicationDao implements DaoInterface{
 		ArrayList<Customer> customer = new ArrayList<Customer>();
 		while(rs.next())
 		{
-			 int SSN  = rs.getInt("SSN");
-			int pcust_id = rs.getInt("pcust_id");
+			 int SSN  = rs.getInt("ssn");
+			int pcust_id = rs.getInt("cust_id");
 			String cust_name = rs.getString("cust_name");
 			String cust_addr = rs.getString("cust_addr");
 			int cust_age = rs.getInt("cust_age");

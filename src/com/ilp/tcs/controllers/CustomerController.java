@@ -60,8 +60,7 @@ String pathInfo = request.getPathInfo();
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		
-		
-		ApplicationDao dao = new ApplicationDao();
+	ApplicationDao dao = new ApplicationDao();
 		
 		ApplicationService service = new ApplicationService(dao);
 		String pathInfo = request.getPathInfo();
@@ -205,18 +204,17 @@ String pathInfo = request.getPathInfo();
 		return;
 		}
 		
-		//end of customer search API	
+		//end of customer search API		
 		
 		//reactivate API
-		else if(urlSelector.equalsIgnoreCase("reactivatecustomer")){
-			String payload=Utils.getJSONAngular(request);
-			Gson gson=new Gson();
-			Customer customer=gson.fromJson(payload, Customer.class);
-			CustomerResponse customerResponseOBJ=service.reActivateCustomer(customer.getSsn());
-			Utils.sendAsJson(response, customerResponseOBJ);
-		    return;
-		}
-		
+				else if(urlSelector.equalsIgnoreCase("reactivatecustomer")){
+					String payload=Utils.getJSONAngular(request);
+					Gson gson=new Gson();
+					Customer customer=gson.fromJson(payload, Customer.class);
+					CustomerResponse customerResponseOBJ=service.reActivateCustomer(customer.getSsn());
+					Utils.sendAsJson(response, customerResponseOBJ);
+				    return;
+				}
 		
 
 		//This block to handle any invalid  urlSelector

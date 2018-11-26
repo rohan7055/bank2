@@ -17,7 +17,7 @@ create sequence custId_seq start with 300000001 MAXVALUE 999999999 increment by 
 
 select * from CUSTOMER_GROUPB;
 update CUSTOMER_GROUPB set cust_status='inactive';
-select * from customer_groupB where cust_id=300000002;
+select * from customer_groupB where cust_id=300000006;
 
 insert into CUSTOMER_GROUPB values (123456789,custId_seq.nextval,'Rishabh','Rajasthan',19,'Deoli','Rajasthan','active',
 CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
@@ -40,6 +40,7 @@ create sequence acctId_seq start with 500000001 MAXVALUE 999999999 increment by 
 
 insert into account_groupB values (acctId_seq.nextval,300000001,'S',23000,CURRENT_TIMESTAMP,'active')
 update account_groupB set acct_status='active';
+delete from account_groupB;
 
 create table userStore_groupB
 (

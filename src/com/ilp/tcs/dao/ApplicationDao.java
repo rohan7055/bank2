@@ -135,7 +135,7 @@ public class ApplicationDao implements DaoInterface{
 		Connection conn=DatabaseUtil.getConnection();
 		PreparedStatement ps=conn.prepareStatement(QueryHelper.LOGIN_QUERY);
 		ps.setLong(1, ssn);
-		ps.setString(2, MD5.passwordToMD5(password).toUpperCase());
+		ps.setString(2, MD5.passwordToMD5(password).toLowerCase());
 		ResultSet rs=ps.executeQuery();
 		
         while(rs.next()) {
@@ -223,7 +223,8 @@ public class ApplicationDao implements DaoInterface{
 		if(rs.next())
 		{
 			customer.setCust_id(cust_id);
-			customer.setCust_name(rs.getString(""));
+			customer.setSsn(rs.getLong("ssn"));
+			customer.setCust_name(rs.getString("cust_name"));
 			customer.setCust_addr(rs.getString("cust_addr"));
 			customer.setCust_age(rs.getInt("cust_age"));
 			customer.setCust_city(rs.getString("cust_city"));
@@ -280,7 +281,7 @@ public class ApplicationDao implements DaoInterface{
 			account.setCust_id(rs.getLong(2));
 			account.setAcct_type(rs.getString(3));
 			account.setAcct_balance(rs.getDouble(4));
-			account.setAcct_created_date(rs.getString(5));
+			//account.setAcct_created_date(rs.getString(5));
 			account.setAcct_status(rs.getString(6));
 			
 		}
@@ -312,7 +313,7 @@ public class ApplicationDao implements DaoInterface{
 	
 	public Account viewAccountById(long acct_id) throws SQLException
 	{
-		Account account=new Account();
+		Account account=null;
 		
 		Connection conn = DatabaseUtil.getConnection();
 		PreparedStatement ps = conn.prepareStatement(QueryHelper.GET_ACCOUNT_BY_ID);
@@ -323,6 +324,7 @@ public class ApplicationDao implements DaoInterface{
 		
 		if(rs.next())
 		{
+			account=new Account();
 			account.setAcct_id(acct_id);
 			account.setCust_id(rs.getLong(2));
 			account.setAcct_type(rs.getString(3));
@@ -358,12 +360,10 @@ public class ApplicationDao implements DaoInterface{
 		Connection conn=DatabaseUtil.getConnection();
 		PreparedStatement ps=conn.prepareStatement(sql);
 		ps.setLong(1, a.getAcct_id());
-
 		ps.setLong(2, a.getCust_id());
 		ps.setString(3,a.getAcct_type());
 		ps.setDouble(4,a.getAcct_balance());
-		ps.setString(5, "active");
-		
+		ps.setString(5, a.getAcct_status());		
 		status=ps.executeUpdate();
 		DatabaseUtil.closeStatement(ps);
 		DatabaseUtil.closeConnection(conn);
@@ -379,8 +379,8 @@ public class ApplicationDao implements DaoInterface{
 		ArrayList<Customer> customer = new ArrayList<Customer>();
 		while(rs.next())
 		{
-			 int SSN  = rs.getInt("ssn");
-			int pcust_id = rs.getInt("cust_id");
+			 int SSN  = rs.getInt("SSN");
+			int pcust_id = rs.getInt("pcust_id");
 			String cust_name = rs.getString("cust_name");
 			String cust_addr = rs.getString("cust_addr");
 			int cust_age = rs.getInt("cust_age");
@@ -398,7 +398,7 @@ public class ApplicationDao implements DaoInterface{
 
 	@Override
 	public ArrayList<Account> viewAccountsByCustId(long cust_id) throws SQLException {
-        ArrayList<Account> acctList=new ArrayList<>();
+        ArrayList<Account> acctList=new ArrayList<>();;
 		Account account=null;
 		Connection conn = DatabaseUtil.getConnection();
 		PreparedStatement ps = conn.prepareStatement(QueryHelper.GET_ACCOUNT_BY_CUSTID);
@@ -409,6 +409,7 @@ public class ApplicationDao implements DaoInterface{
 		
 		while(rs.next())
 		{
+			
 			account=new Account();
 			account.setAcct_id(rs.getLong(1));
 			account.setCust_id(rs.getLong(2));
@@ -467,8 +468,7 @@ public class ApplicationDao implements DaoInterface{
 		
 		return account;
 	}
-
-
+	
 	@Override
 	public int reActivateCustomer(long ssn) throws SQLException {
 		Customer customer=null;
@@ -483,9 +483,7 @@ public class ApplicationDao implements DaoInterface{
 		return status;
 		
 	}
-	
-	
-	
+
 
 
 }

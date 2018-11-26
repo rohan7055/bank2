@@ -20,7 +20,6 @@ import com.ilp.tcs.responsemodel.StatusModel;
 import com.ilp.tcs.responsemodel.AccountResponse;
 import com.ilp.tcs.utils.AppConstants;
 import com.ilp.tcs.utils.MessageConstants;
-import com.ilp.tcs.utils.Utils;
 
 public class ApplicationService {
 	
@@ -114,10 +113,7 @@ public class ApplicationService {
 				Customer customer =  daoInterface.getCustomer(cust_id);
 				if(customer.getCust_status().equalsIgnoreCase("active")){
 					CustomerResponse responseObj=checkCustomerDelete(cust_id);
-					if(responseObj.isStatus()) {
-						
-					
-                   					
+					if(responseObj.isStatus()) {				
 					if(daoInterface.deleteCustomer(cust_id) > 0)
 					{
 						response.setStatus(true);
@@ -318,6 +314,7 @@ public class ApplicationService {
 		AccountResponse accountResponse=new AccountResponse();
 		
 		Account data= new Account();
+		Account checkAccount= new Account();
 		
 		try
 		{
@@ -329,15 +326,38 @@ public class ApplicationService {
 					accountResponse.setMessage("Customer is deactivated");
 					accountResponse.setData(data);
 				}else if(customer.getCust_status().equals("active")){
-					account.setAcct_id(daoInterface.getAccountId());
-					if(daoInterface.createAccount(account)>0)
+					String acct_type=account.getAcct_type();
+					checkAccount= daoInterface.getAccountByType(account.getCust_id(), acct_type);
+					if(checkAccount!= null)
 					{
-						data=daoInterface.getAccount(account.getAcct_id());
-						accountResponse.setStatus(true);
-						accountResponse.setStatusCode(HttpServletResponse.SC_OK);
-						accountResponse.setMessage(MessageConstants.ACCOUNT_SUCCESS);
-						accountResponse.setData(data);
+						if(checkAccount.getAcct_status().equals("active"))
+						{
+							accountResponse.setStatus(false);
+							accountResponse.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
+							accountResponse.setMessage(MessageConstants.ACCOUNT_ALREADY_EXIST);
+						}
+						else
+						{
+							checkAccount.setAcct_status("active");
+							accountResponse.setStatus(false);
+							accountResponse.setStatusCode(HttpServletResponse.SC_OK);
+							accountResponse.setMessage(MessageConstants.ACCOUNT_INTO_ACTIVE_STATE);
+						}
 					}
+					else
+					{
+						account.setAcct_id(daoInterface.getAccountId());
+						account.setAcct_status("active");
+						int status=daoInterface.createAccount(account);
+						System.out.println(status);
+						if(status>0)
+						{
+							data=daoInterface.getAccount(account.getAcct_id());
+							accountResponse.setStatus(true);
+							accountResponse.setStatusCode(HttpServletResponse.SC_OK);
+							accountResponse.setMessage(MessageConstants.ACCOUNT_SUCCESS);
+							accountResponse.setData(data);
+						}
 						else
 						{
 							accountResponse.setStatus(false);
@@ -345,6 +365,8 @@ public class ApplicationService {
 							accountResponse.setMessage(MessageConstants.ACCOUNT_FAILURE);
 							
 						}
+					}
+					
 					
 				}
 			}else{
@@ -374,9 +396,8 @@ public class ApplicationService {
 		
 		try
 		{
-			Account acct=new Account();
-			acct=daoInterface.viewAccountById(acct_id);
-			if(!acct.equals(" ") || acct!=null)
+			Account acct=daoInterface.viewAccountById(acct_id);
+			if(acct!=null)
 			{
 				accountResponse.setStatus(true);
 				accountResponse.setMessage("Success");
@@ -418,13 +439,11 @@ public class ApplicationService {
 				
 				temp.setAcct_id(account.getAcct_id());
 				temp.setAcct_status(account.getAcct_status());
-		     if(account.getAcct_status().equals("active")) {
 
-				  if(account.getAcct_type().equals(account_type))
-				   { 
+				if(temp.getAcct_type().equals(account_type))
+				{
 					
-					
-					if(daoInterface.deleteAccount(acct_id) > 0)
+					if(daoInterface.deleteCustomer(acct_id) > 0)
 					{
 						response.setStatus(true);
 						response.setStatusCode(200);
@@ -444,16 +463,7 @@ public class ApplicationService {
 					response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
 					response.setMessage("Account Type does not match with the specified Account ID");
 				}
-				
-				
-			}else {
-				response.setStatus(false);
-				response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
-				response.setMessage("Account is already deactivated");
 			}
-				
-				
-		}
 			else
 			{
 				response.setStatus(false);
@@ -732,7 +742,7 @@ public class ApplicationService {
 		try {
 			ArrayList<Account> acct=daoInterface.viewAccountsByCustId(cust_id);
 			
-			if(acct!=null || acct.size()==0)
+			if(acct!=null&&!acct.isEmpty())
 			{
 				accountViewResponse.setStatus(true);
 				accountViewResponse.setMessage("Success");
@@ -835,6 +845,7 @@ public AccountResponse checkAccountDelete(long acct_id) {
 		}
 	}
 
+
 public CustomerResponse reActivateCustomer(long ssn) {
 	CustomerResponse response=checkCustomer(ssn);
 	CustomerResponse responseOBJ=new CustomerResponse();
@@ -868,6 +879,7 @@ public CustomerResponse reActivateCustomer(long ssn) {
 	
 	return responseOBJ;
 }
+
 
 
 }

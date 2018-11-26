@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.ilp.tcs.bean.Customer;
 import com.ilp.tcs.bean.User;
-import com.ilp.tcs.controllers.Models.Model;
 import com.ilp.tcs.dao.ApplicationDao;
 import com.ilp.tcs.responsemodel.CustomerLoginResponse;
 import com.ilp.tcs.responsemodel.CustomerResponse;
@@ -100,7 +99,6 @@ public class UserController extends HttpServlet{
             statusModel.setStatus(false);
             statusModel.setMessage(MessageConstants.BAD_REQUEST);
             statusModel.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
-
             Utils.sendAsJson(resp, statusModel);
 			return;
 		}*/
@@ -151,7 +149,6 @@ public class UserController extends HttpServlet{
 			System.out.println(payload);
 			Gson _gson = new Gson();
 			User user=_gson.fromJson(payload, User.class);
-			Typetester typetester=new Typetester();
             CustomerLoginResponse responseOBJ=service.login(user.getSsn(), user.getPassword());
 			System.out.println("RESPONSE "+responseOBJ.getMessage()+":"+responseOBJ.getStatusCode());
 	        Utils.sendAsJson(resp, responseOBJ);

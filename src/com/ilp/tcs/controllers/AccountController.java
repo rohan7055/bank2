@@ -24,13 +24,13 @@ import com.ilp.tcs.utils.Utils;
 public class AccountController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-   
+	@Override
   	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	
 	}
 
-	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
         ApplicationDao dao = new ApplicationDao();
@@ -63,7 +63,6 @@ public class AccountController extends HttpServlet {
 		}
 		
 		String urlSelector = split[1];
-		try {
 		
 		//Start of create account API
 		//Create account has 3 API calls 
@@ -162,16 +161,6 @@ public class AccountController extends HttpServlet {
 			statusModel.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
 			Utils.sendAsJson(response, statusModel);
 			return ;	
-		}
-	}
-		catch (Exception e) {
-			e.printStackTrace();
-			StatusModel statusModel=new StatusModel();
-            statusModel.setStatus(false);
-            statusModel.setMessage("Some Error Occured");
-            statusModel.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
-            Utils.sendAsJson(response, statusModel);
-			return;
 		}
 		
 
